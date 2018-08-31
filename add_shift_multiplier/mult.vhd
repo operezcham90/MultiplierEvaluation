@@ -47,13 +47,13 @@ PORT(
 );
 end component;
 
-component reg8_dec is
+component reg4_dec is
 PORT(
-    d : IN STD_LOGIC_VECTOR(7 downto 0); -- input
+    d : IN STD_LOGIC_VECTOR(3 downto 0); -- input
     ld : IN STD_LOGIC; -- load/enable
     clr : IN STD_LOGIC; -- async clear
     clk : IN STD_LOGIC; -- clock
-    q : OUT STD_LOGIC_VECTOR(7 downto 0); -- output
+    q : OUT STD_LOGIC_VECTOR(3 downto 0); -- output
     sh : IN STD_LOGIC; -- shift
     dec : IN STD_LOGIC; -- decrease
     s_in : IN STD_LOGIC -- shift in
@@ -79,7 +79,7 @@ signal sha : std_logic;
 signal clra : std_logic;
 
 signal ldc : std_logic;
-signal c : std_logic_vector(7 downto 0);
+signal c : std_logic_vector(3 downto 0);
 signal decc : std_logic;
 
 TYPE State_type IS (t0, t1, t2, t3);
@@ -93,7 +93,7 @@ multiplier : reg8 PORT map (d => b, ld => ldq, clr => clr, clk => clk, q => q, s
 multiplier_carry : reg1 PORT map (d => e_in , ld => lde , clr => clre, clk => clk, q => e);
 adder : adder8 port map (a => m, b => ac, c_in => '0', s => ac_in, c => e_in);
 accumulator : reg8 PORT map(d => ac_in, ld => lda, clr => clra, clk => clk, q => ac, sh => sha, s_in => e);
-counter : reg8_dec PORT map (d => "00001000", ld => ldc, clr => clr, clk => clk, q => c, sh => '0', s_in => '0', dec => decc);
+counter : reg4_dec PORT map (d => "1000", ld => ldc, clr => clr, clk => clk, q => c, sh => '0', s_in => '0', dec => decc);
 
 p <= ac & q;
 
@@ -174,7 +174,7 @@ begin
                 sha <= '1';
                 shq <= '1';
                 clre <= '1';
-                if c = "00000000" then
+                if c = "0000" then
                     state <= t0;
                 else
                     state <= t2;
